@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dimaxdqwerty/go-web-app/go-web-app/pkg/api"
-	"github.com/dimaxdqwerty/go-web-app/go-web-app/pkg/data"
-	"github.com/dimaxdqwerty/go-web-app/go-web-app/pkg/db"
+	"github.com/dimaxdqwerty/go-web-app/pkg/api"
+	"github.com/dimaxdqwerty/go-web-app/pkg/data"
+	"github.com/dimaxdqwerty/go-web-app/pkg/db"
 
 	"github.com/gorilla/mux"
 )
