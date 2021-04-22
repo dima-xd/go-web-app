@@ -1,0 +1,11 @@
+-- +goose Up
+CREATE TABLE users
+(
+    id SERIAL PRIMARY KEY,
+    login CHARACTER VARYING(30) NOT NULL,
+    password CHARACTER VARYING(30) NOT NULL,
+    email CHARACTER VARYING(30) NOT NULL
+);
+
+-- +goose Down
+DROP TABLE users;

@@ -1,14 +1,15 @@
 package main
 
 import (
+	"go-web-app/pkg/controller"
+	"go-web-app/pkg/data"
+	"html/template"
 	"log"
 	"net"
 	"net/http"
 	"os"
 
-	"github.com/dimaxdqwerty/go-web-app/pkg/api"
-	"github.com/dimaxdqwerty/go-web-app/pkg/data"
-	"github.com/dimaxdqwerty/go-web-app/pkg/db"
+	"go-web-app/pkg/db"
 
 	"github.com/gorilla/mux"
 )
@@ -47,15 +48,23 @@ func init() {
 	}
 }
 
+var templates *template.Template
+
 func main() {
 	conn, err := db.GetConnection(host, port, user, dbname, password, sslmode)
 	if err != nil {
 		log.Fatalln(err)
 	}
+	templates = template.Must(template.ParseGlob("template/*.html"))
 	r := mux.NewRouter()
-	userData := data.NewUserData(conn)
-	api.ServeUserResource(r, *userData)
 	r.Use(mux.CORSMethodMiddleware(r))
+
+	userData := data.NewUserData(conn)
+	controller.ServeLoginResource(r, *userData, templates)
+
+	fs := http.FileServer(http.Dir("./static/"))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+
 	listener, err := net.Listen("tcp", serverPort)
 	if err != nil {
 		log.Fatalln(err)
@@ -64,5 +73,4 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 }
